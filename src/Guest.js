@@ -6,11 +6,13 @@ import './css/style.css'
 const Guest = props =>{
     return(
 
-        <li className="responded" key={props.index}>
-            <span>{props.guest.name}</span>
+        <li className="responded">
+            <span>{props.name}</span>
         <label>
-          <input type="checkbox" checked={props.guest.isConfirmed} /> 
-          {props.guest.isConfirmed? 'Confirmed' : 'Not confirmed' }
+          <input type="checkbox" checked={props.isConfirmed} 
+          onChange={props.handleConfirm}
+          /> 
+          {props.isConfirmed? 'Confirmed' : 'Not confirmed' }
             </label>
         <button>edit</button>
         <button>remove</button>
@@ -19,8 +21,9 @@ const Guest = props =>{
 }
 
 Guest.propTypes = {
-    guest: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired
+    name: PropTypes.object.isRequired,
+    isConfirmed: PropTypes.bool.isRequired,
+    handleConfirm: PropTypes.func.isRequired
 }
 
 
