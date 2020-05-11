@@ -6,6 +6,7 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      isFiltered: false,
       guests : [
         {
           name: "Dragan",
@@ -28,7 +29,7 @@ class App extends React.Component {
         if (index === indexToChange){
           return {
             ...guest,
-            [property]: !guest.property
+            [property]: !guest[property]
           }
         }else{
           return guest;
@@ -45,6 +46,25 @@ class App extends React.Component {
     this.toggleGuestPropertyAt('isEditing', index)
   }
 
+  setNameAt = (name, index)=>{
+    this.setState({
+      guests: this.state.guests.map((guest, curIndex)=>{
+        if(index===curIndex){
+          return {
+            ...guest,
+            name: name
+          }
+        }
+        return guest
+      })
+    })
+  }
+
+  toggleFilter = () =>{
+    this.setState({
+      isFiltered: !this.state.isFiltered,
+    })
+  }
   
 
   render() {
@@ -63,7 +83,9 @@ class App extends React.Component {
           <div>
             <h2>Invitees</h2>
             <label>
-              <input type="checkbox" /> Hide those who haven't responded
+              <input type="checkbox" 
+              checked={this.state.isFiltered}
+              onChange={this.toggleFilter}/> Hide those who haven't responded
           </label>
           </div>
           <table className="counter">
@@ -84,7 +106,10 @@ class App extends React.Component {
           </table>
           <GuestList guests={this.state.guests} 
           toggleConfirm={this.toggleConfirmationAt}
-          toggleEditingAt={this.toggleIsEditingAt}/>
+          toggleEditingAt={this.toggleIsEditingAt}
+          setNameAt={this.setNameAt}
+          isFiltered={this.state.isFiltered}
+          />
         </div>
       </div>
     );

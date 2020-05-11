@@ -4,11 +4,13 @@ import GuestName from './GuestName'
 import './css/style.css'
 
 const Guest = props =>{
-  console.log(props.isEditing, props.name)
+
     return(
 
         <li className="responded">
-         <GuestName isEditing={props.isEditing} nameTest={props.name}>
+         <GuestName isEditing={props.isEditing} 
+         nameTest={props.name}
+         handleNameEdit={e=> props.setName(e.target.value)}>
            {props.name}
          </GuestName>
         <label>
@@ -17,7 +19,9 @@ const Guest = props =>{
           /> 
           {props.isConfirmed? 'Confirmed' : 'Not confirmed' }
             </label>
-        <button>edit {props.isEditing}</button>
+        <button onClick={props.handleEditing}>
+          
+           {props.isEditing?'save': 'edit'}</button>
         <button>remove</button>
       </li>
     )
@@ -29,6 +33,8 @@ Guest.propTypes = {
     handleConfirm: PropTypes.func.isRequired,
     isEditing: PropTypes.bool.isRequired,
     toggleEditingAt: PropTypes.func.isRequired,
+    handleEditing: PropTypes.func.isRequired,
+    setName: PropTypes.func.isRequired,
 }
 
 
