@@ -11,24 +11,24 @@ class App extends React.Component {
           name: "Dragan",
           isConfirmed: false
         },
-        {name: 'Luka', isConfirmed: true},
-        {name: 'Danijela', isConfirmed: false},
-        {name: 'Emilija', isConfirmed: false},
-        {name: 'Kristina', isConfirmed: false},
+        {name: 'Luka', isConfirmed: true, isEditing: false},
+        {name: 'Danijela', isConfirmed: false, isEditing: false},
+        {name: 'Emilija', isConfirmed: false, isEditing: false},
+        {name: 'Kristina', isConfirmed: false, isEditing: true},
       ]
     }
   }
   getTotalInvited = () => this.state.guests.length;
   getAttendingGuests = () => this.state.guests.filter(p=>p.isConfirmed).length;
   getUnconfirmedInvitations =() => this.state.guests.filter(p=>!p.isConfirmed).length
-  toggleConfirmationAt = (indexToChange) =>{
-    console.log("toggle confirmation at index ", indexToChange)
+  toggleGuestPropertyAt = (property, indexToChange) =>{
+    // [property] -> computed property
     this.setState({
       guests: this.state.guests.map((guest, index)=>{
         if (index === indexToChange){
           return {
             ...guest,
-            isConfirmed: !guest.isConfirmed
+            [property]: !guest.property
           }
         }else{
           return guest;
@@ -36,6 +36,16 @@ class App extends React.Component {
       })
     })
   }
+
+  toggleConfirmationAt =(index)=>{
+    this.toggleGuestPropertyAt('isConfirmed', index)
+  }
+
+  toggleIsEditingAt = (index)=>{
+    this.toggleGuestPropertyAt('isEditing', index)
+  }
+
+  
 
   render() {
     return (
@@ -72,7 +82,9 @@ class App extends React.Component {
               </tr>
             </tbody>
           </table>
-          <GuestList guests={this.state.guests} toggleConfirm={this.toggleConfirmationAt}/>
+          <GuestList guests={this.state.guests} 
+          toggleConfirm={this.toggleConfirmationAt}
+          toggleEditingAt={this.toggleIsEditingAt}/>
         </div>
       </div>
     );
