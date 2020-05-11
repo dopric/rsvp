@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "./css/style.css"
 import GuestList from './GuestList'
+import Counter from './Counter'
 
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      personToInvite: '',
       isFiltered: false,
       guests : [
         {
@@ -65,6 +67,38 @@ class App extends React.Component {
       isFiltered: !this.state.isFiltered,
     })
   }
+
+  invitePerson =(e) =>{
+    e.preventDefault();
+  this.setState({
+    
+    guests: [
+      {
+        name: this.state.personToInvite,
+        isEditing: false,
+        isConfirmed: false
+      },
+      ...this.state.guests
+    ],
+    personToInvite: ''
+  })
+   
+  }
+
+  handleInvite = e =>{
+    this.setState({
+      personToInvite: e.target.value
+    })
+  }
+
+  handleRemove = (index) =>{
+    this.setState({
+      guests: [
+        ...this.state.guests.slice(0, index),
+        ...this.state.guests.slice(index + 1)
+      ]
+    })
+  }
   
 
   render() {
@@ -74,8 +108,11 @@ class App extends React.Component {
         <header>
           <h1>RSVP</h1>
           <p>Developer's MeetUp Switzerland on July 12 in St.Gallen</p>
-          <form>
-            <input type="text" value="Safia" placeholder="Invite Someone" />
+          <form onSubmit={this.invitePerson}>
+            <input type="text" 
+            placeholder="Invite Someone" 
+            value={this.state.personToInvite}
+            onChange={this.handleInvite}/>
             <button type="submit" name="submit" value="submit">Submit</button>
           </form>
         </header>
@@ -88,27 +125,18 @@ class App extends React.Component {
               onChange={this.toggleFilter}/> Hide those who haven't responded
           </label>
           </div>
-          <table className="counter">
-            <tbody>
-              <tr>
-                <td>Attending:</td>
-                <td>{this.getAttendingGuests()}</td>
-              </tr>
-              <tr>
-                <td>Unconfirmed:</td>
-                <td>{this.getUnconfirmedInvitations() }</td>
-              </tr>
-              <tr>
-                <td>Total:</td>
-                <td>{this.getTotalInvited()}</td>
-              </tr>
-            </tbody>
-          </table>
+          <Counter 
+          numberAttending={this.getAttendingGuests()}
+          numberUnconfirmed={this.getUnconfirmedInvitations() }
+          numberTotal={this.getTotalInvited()}/>
+          
           <GuestList guests={this.state.guests} 
           toggleConfirm={this.toggleConfirmationAt}
           toggleEditingAt={this.toggleIsEditingAt}
           setNameAt={this.setNameAt}
           isFiltered={this.state.isFiltered}
+          handleRemove={this.handleRemove}
+          pendingGuest={this.state.personToInvite}
           />
         </div>
       </div>
